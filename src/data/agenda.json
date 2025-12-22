@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "titulo": "Reunião Educação",
+    "data": "2025-03-12",
+    "status": "concluida",
+    "categoria": "educacao"
+  },
+  {
+    "id": 2,
+    "titulo": "Visita Técnica",
+    "data": "2025-04-02",
+    "status": "prevista",
+    "categoria": "infraestrutura"
+  },
+  {
+    "id": 3,
+    "titulo": "Conferência Capital",
+    "data": "2025-05-10",
+    "status": "prevista",
+    "categoria": "evento"
+  }
+]
