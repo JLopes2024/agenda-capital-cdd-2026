@@ -1,16 +1,57 @@
-# React + Vite
+# 📅 Agenda Capital — 2026
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto desenvolvido em **React.js + Vite** com foco em **visualização clara de agendas públicas**, utilizando **leitura direta de dados locais (planilha/JSON)**, sem necessidade de API ou backend.
 
-Currently, two official plugins are available:
+Este projeto é uma reconstrução moderna da Agenda Capital, pensado para **2026**, priorizando simplicidade, desempenho e clareza da informação.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🎯 Objetivo do Projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Exibir agendas de forma organizada e acessível
+- Consumir dados locais (planilha convertida para JSON)
+- Não depender de backend ou API
+- Servir como projeto de portfólio Frontend
+- Facilitar futuras expansões (mobile-first, filtros, UX)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tecnologias Utilizadas
+
+- ⚛️ **React.js**
+- ⚡ **Vite**
+- 📄 **JSON local (simulando planilha)**
+- 🎨 CSS puro (sem frameworks)
+- 🚀 Deploy preparado para **Vercel**
+
+---
+
+## 📂 Estrutura do Projeto
+
+```bash
+src/
+ ├─ components/
+ │   ├─ AgendaCard.jsx      # Card de exibição da agenda
+ │   └─ SkeletonCard.jsx   # Loading visual
+ ├─ services/
+ │   └─ agendaService.js   # Leitura dos dados locais
+ ├─ data/
+ │   └─ agenda.json        # Dados da agenda (planilha)
+ ├─ App.jsx
+ ├─ main.jsx
+ └─ index.css
+
+
+# Rode o projeto Localmente com:
+
+# Clone o repositório
+git clone https://github.com/JLopes2024/agenda-capital-cdd-2026.git
+
+# Acesse a pasta
+cd agenda-capital-cdd-2026
+
+# Instale as dependências
+npm install
+
+# Rode o projeto
+npm run dev
