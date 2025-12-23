@@ -1,9 +1,5 @@
-export async function getAgenda() {
-  const response = await fetch("/src/data/agenda.json");
+import agenda from "../data/agenda.json";
 
-  if (!response.ok) {
-    throw new Error("Erro ao carregar agenda");
-  }
-
-  return response.json();
+export function getAgenda() {
+  return agenda;
 }

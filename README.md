@@ -41,6 +41,7 @@ src/
  ├─ main.jsx
  └─ index.css
 
+---
 
 # Rode o projeto Localmente com:
 

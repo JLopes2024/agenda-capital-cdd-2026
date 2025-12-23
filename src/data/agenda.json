@@ -3,21 +3,21 @@
     "id": 1,
     "titulo": "Reunião Educação",
     "data": "2025-03-12",
-    "status": "concluida",
+    "status": "pending",
     "categoria": "educacao"
   },
   {
     "id": 2,
     "titulo": "Visita Técnica",
     "data": "2025-04-02",
-    "status": "prevista",
+    "status": "done",
     "categoria": "infraestrutura"
   },
   {
     "id": 3,
     "titulo": "Conferência Capital",
     "data": "2025-05-10",
-    "status": "prevista",
+    "status": "pending",
     "categoria": "evento"
   }
 ]
