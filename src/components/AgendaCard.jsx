@@ -1,20 +1,27 @@
 function AgendaCard({ item }) {
-  const statusColor = item.status === "concluida" ? "#4CAF50" : "#FF9800";
+  const isDone = item.status === "concluida";
+
+  const statusColor = isDone ? "#2e7d32" : "#ef6c00";
+  const statusLabel = isDone ? "Concluída" : "Prevista";
 
   return (
     <div
       style={{
-        border: `2px solid ${statusColor}`,
+        borderLeft: `6px solid ${statusColor}`,
+        backgroundColor: "#fff",
         borderRadius: "8px",
-        padding: "15px",
-        margin: "10px 0",
-        backgroundColor: "#f9f9f9",
+        padding: "16px",
+        marginBottom: "12px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
       }}
     >
-      <h2 style={{ color: statusColor }}>{item.titulo}</h2>
-      <p><strong>Data:</strong> {item.data}</p>
-      <p><strong>Status:</strong> {item.status}</p>
-      <p><strong>Categoria:</strong> {item.categoria}</p>
+      <h2 style={{ margin: "0 0 8px 0", color: "#222" }}>
+        {item.titulo}
+      </h2>
+
+      <p><strong>📅 Data:</strong> {item.data}</p>
+      <p><strong>📌 Status:</strong> <span style={{ color: statusColor }}>{statusLabel}</span></p>
+      <p><strong>🏷 Categoria:</strong> {item.categoria}</p>
     </div>
   );
 }
