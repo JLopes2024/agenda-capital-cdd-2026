@@ -15,6 +15,9 @@ body,
 #root {
   height: 100%;
 }
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
 :root {
   --bg: #0f172a;
@@ -118,28 +121,6 @@ footer span {
 
 
 
-/* SKELETON */
-.skeleton {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 1rem;
-  animation: pulse 1.5s infinite;
-}
-
-.skeleton-title {
-  width: 70%;
-  height: 14px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
-}
-
-.skeleton-text {
-  width: 40%;
-  height: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-}
 
 @keyframes pulse {
   0% {
@@ -182,4 +163,11 @@ footer span {
   .agenda-list {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+button {
+  @apply focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 dark:focus:ring-offset-black;
+}
+.bg-card-light {
+  background-color: var(--card);
 }

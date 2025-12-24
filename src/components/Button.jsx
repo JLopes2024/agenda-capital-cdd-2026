@@ -1,18 +1,16 @@
-export default function Button({
-  children,
-  active = false,
-  onClick,
-}) {
+export default function Button({ active, children, ...props }) {
   return (
     <button
-      onClick={onClick}
+      {...props}
       className={`
-        flex-1 rounded-lg px-3 py-2 text-sm font-medium transition
+      focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 dark:focus:ring-offset-black
+      rounded-lg px-3 py-1 text-sm font-medium transition
         ${
           active
-            ? "bg-sky-400 text-slate-900"
-            : "border border-slate-300 text-slate-700 dark:border-white/10 dark:text-slate-200 hover:bg-sky-400 hover:text-slate-900"
+            ? "bg-sky-500 text-white shadow"
+            : "bg-white text-slate-700 border border-slate-300 hover:bg-sky-100 hover:text-slate-900 dark:bg-slate-900 dark:text-slate-300 dark:border-white/10 dark:hover:bg-sky-500/20"
         }
+        active:scale-95
       `}
     >
       {children}

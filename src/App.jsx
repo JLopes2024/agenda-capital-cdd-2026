@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AgendaCard from "./components/AgendaCard";
 import SkeletonCard from "./components/SkeletonCard";
+import EmptyState from "./components/EmptyState";
 import { getAgenda } from "./services/agendaService";
 import Button from "./components/Button";
 
@@ -16,7 +17,10 @@ function App() {
 
   /* Tema */
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle(
+      "dark",
+      theme === "dark"
+    );
     localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -28,14 +32,28 @@ function App() {
     }, 1200);
   }, []);
 
-  const filteredAgenda = agenda.filter((item) => {
-    if (filter === "all") return true;
-    return item.status === filter;
-  });
+  /* Filtro + ordenação por data */
+  const filteredAgenda = agenda
+    .filter((item) => {
+      if (filter === "all") return true;
+      return item.status === filter;
+    })
+    .sort((a, b) => new Date(a.data) - new Date(b.data));
+
+    
 
   return (
     <div className="min-h-screen bg-gray-200 text-slate-900 dark:bg-black dark:text-slate-100 flex flex-col">
-    
+      {/* BOTÃO DE TEMA */}
+      <button
+        aria-label="Alternar tema"
+        onClick={() =>
+          setTheme(theme === "dark" ? "light" : "dark")
+        }
+        className="fixed top-3 right-3 z-50 rounded-full bg-black/80 text-white px-3 py-2 text-sm shadow-lg dark:bg-white/10"
+      >
+        {theme === "dark" ? "☀️" : "🌙"}
+      </button>
 
       {/* HEADER */}
       <div className="px-3 pt-3">
@@ -52,7 +70,12 @@ function App() {
           >
             Todos
           </Button>
-
+          <Button
+            active={filter === "pending"}
+            onClick={() => setFilter("pending")}
+          >
+            Previstas
+          </Button>
           <Button
             active={filter === "done"}
             onClick={() => setFilter("done")}
@@ -60,43 +83,33 @@ function App() {
             Concluídas
           </Button>
 
-          <Button
-            active={filter === "pending"}
-            onClick={() => setFilter("pending")}
-          >
-            Previstas
-          </Button>
+
         </div>
 
         {/* LISTA */}
         <section className="grid gap-3">
-          {loading
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <SkeletonCard key={i} />
-              ))
-            : filteredAgenda.map((item) => (
-                <AgendaCard
-                  key={item.id}
-                  titulo={item.titulo}
-                  data={item.data}
-                  status={item.status}
-                />
-              ))}
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))
+          ) : filteredAgenda.length === 0 ? (
+            <EmptyState filter={filter} />
+          ) : (
+            filteredAgenda.map((item) => (
+              <AgendaCard
+                key={item.id}
+                titulo={item.titulo}
+                data={item.data}
+                status={item.status}
+                anastasis={item.anastasis}
+              />
+            ))
+          )}
         </section>
       </main>
-        {/* BOTÃO DE TEMA */}
-      <button
-        aria-label="Alternar tema"
-        onClick={() =>
-          setTheme(theme === "dark" ? "light" : "dark")
-        }
-        className="fixed top-3 right-3 z-50 rounded-full bg-black/80 text-white px-3 py-2 text-sm shadow-lg dark:bg-white/10"
-      >
-        {theme === "dark" ? "☀️" : "🌙"}
-      </button>
+
       {/* FOOTER */}
       <Footer />
-
     </div>
   );
 }
