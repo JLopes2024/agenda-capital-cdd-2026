@@ -68,9 +68,8 @@ function App() {
               normalized[
                 "se_houver_alguma_informacao_adicional_sobre_o_evento_que_precisamos_saber_nos_informe_abaixo"
               ] || "",
-              status: normalized["status"] || "",
-                          anastasis: normalized["anastasis"] || "",
-
+            status: normalized["status"] || "",
+            anastasis: normalized["anastasis"] || "",
           };
         });
 
@@ -106,7 +105,7 @@ function App() {
         ) : agenda.length === 0 ? (
           <EmptyState filter="all" />
         ) : (
-          <section className="grid gap-3">
+          <section className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {agenda.map((item) => (
               <AgendaCard key={item.id} {...item} />
             ))}
