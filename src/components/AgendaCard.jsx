@@ -1,67 +1,32 @@
-import { useState } from "react";
-
-export default function AgendaCard({ titulo, data, status, anastasis }) {
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const formattedDate = new Date(data).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-
-  const isOk = anastasis === "ok";
-
+export default function AgendaCard({
+  titulo,
+  endereco,
+  cidade,
+  data,
+  horaInicio,
+  horaFim,
+  pregador,
+  status,
+  missao,
+}) {
   return (
     <div className="rounded-xl border border-black/5 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-zinc-900">
-      {/* TÍTULO */}
       <h2 className="mb-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
         {titulo}
       </h2>
 
-      {/* DATA */}
-      <p className="text-xs text-slate-500 dark:text-slate-400">{formattedDate}</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400">
+        {data} {horaInicio && `- ${horaInicio}`} {horaFim && `às ${horaFim}`}
+      </p>
 
-      <div className="mt-3 flex items-center justify-between">
-        {/* STATUS */}
-        <span
-          className={`text-xs font-medium ${
-            status === "done"
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-amber-600 dark:text-amber-400"
-          }`}
-        >
-          {status === "done" ? "Concluído" : "Previsto"}
-        </span>
+      <p className="text-xs">{endereco}</p>
+      <p className="text-xs">{cidade}</p>
+      {pregador && <p className="text-xs">Pregador: {pregador}</p>}
+      {missao && <p className="text-xs">Missão: {missao}</p>}
 
-        {/* ANASTASIS com Tooltip */}
-        <span
-          className="relative inline-block"
-          onClick={() => setShowTooltip(!showTooltip)}
-        >
-          <span
-            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
-              ${
-                isOk
-                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
-                  : "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300"
-              }
-            `}
-          >
-            {isOk ? "Anastasis OK" : "Em liberação"}
-          </span>
-
-          {/* Tooltip */}
-          <span
-            className={`absolute bottom-full left-1/2 mb-1 w-44 -translate-x-1/2 rounded bg-black px-2 py-1 text-[10px] text-white text-center transition-opacity duration-200
-              ${showTooltip ? "opacity-100" : "opacity-0"}
-              md:opacity-0 md:group-hover:opacity-100`}
-          >
-            {isOk
-              ? "Já temos missionário(a) escolhido(a) no Anastasis"
-              : "Aguardando missionário(a) ser liberado(a) no Anastasis"}
-          </span>
-        </span>
-      </div>
+      <span className={`text-xs font-medium ${status === "done" ? "text-emerald-600" : "text-amber-600"}`}>
+        {status === "done" ? "Concluído" : status || "Previsto"}
+      </span>
     </div>
   );
 }
