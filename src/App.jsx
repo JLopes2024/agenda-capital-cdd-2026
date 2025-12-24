@@ -64,12 +64,13 @@ function App() {
             publico: normalized["qual_e_o_publico_do_evento"] || "",
             quantidade: normalized["quantidade_de_pessoas_estimadas"] || "",
             pregador: pregador || "",
-            anastasis: normalized["anastasis"] || "",
             observacoes:
               normalized[
                 "se_houver_alguma_informacao_adicional_sobre_o_evento_que_precisamos_saber_nos_informe_abaixo"
               ] || "",
-              status: normalized["status"] || ""
+              status: normalized["status"] || "",
+                          anastasis: normalized["anastasis"] || "",
+
           };
         });
 
@@ -101,7 +102,7 @@ function App() {
 
       <main className="flex-1 px-3">
         {loading ? (
-          Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)
+          Array.from({ length: 7 }).map((_, i) => <SkeletonCard key={i} />)
         ) : agenda.length === 0 ? (
           <EmptyState filter="all" />
         ) : (
