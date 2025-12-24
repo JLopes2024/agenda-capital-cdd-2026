@@ -16,10 +16,7 @@ function App() {
 
   /* Tema */
   useEffect(() => {
-    document.documentElement.classList.toggle(
-      "dark",
-      theme === "dark"
-    );
+    document.documentElement.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -37,17 +34,8 @@ function App() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-100 flex flex-col">
-      {/* BOTÃO DE TEMA */}
-      <button
-        aria-label="Alternar tema"
-        onClick={() =>
-          setTheme(theme === "dark" ? "light" : "dark")
-        }
-        className="fixed top-3 right-3 z-50 rounded-full bg-slate-800 text-white px-3 py-2 text-sm shadow-lg dark:bg-slate-700"
-      >
-        {theme === "dark" ? "☀️" : "🌙"}
-      </button>
+    <div className="min-h-screen bg-gray-200 text-slate-900 dark:bg-black dark:text-slate-100 flex flex-col">
+    
 
       {/* HEADER */}
       <div className="px-3 pt-3">
@@ -96,9 +84,19 @@ function App() {
               ))}
         </section>
       </main>
-
+        {/* BOTÃO DE TEMA */}
+      <button
+        aria-label="Alternar tema"
+        onClick={() =>
+          setTheme(theme === "dark" ? "light" : "dark")
+        }
+        className="fixed top-3 right-3 z-50 rounded-full bg-black/80 text-white px-3 py-2 text-sm shadow-lg dark:bg-white/10"
+      >
+        {theme === "dark" ? "☀️" : "🌙"}
+      </button>
       {/* FOOTER */}
       <Footer />
+
     </div>
   );
 }
