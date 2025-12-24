@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function AgendaCard({ titulo, data, status, anastasis }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const formattedDate = new Date(data).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -15,9 +19,7 @@ export default function AgendaCard({ titulo, data, status, anastasis }) {
       </h2>
 
       {/* DATA */}
-      <p className="text-xs text-slate-500 dark:text-slate-400">
-        {formattedDate}
-      </p>
+      <p className="text-xs text-slate-500 dark:text-slate-400">{formattedDate}</p>
 
       <div className="mt-3 flex items-center justify-between">
         {/* STATUS */}
@@ -32,7 +34,10 @@ export default function AgendaCard({ titulo, data, status, anastasis }) {
         </span>
 
         {/* ANASTASIS com Tooltip */}
-        <span className="group relative inline-block">
+        <span
+          className="relative inline-block"
+          onClick={() => setShowTooltip(!showTooltip)}
+        >
           <span
             className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide
               ${
@@ -46,7 +51,11 @@ export default function AgendaCard({ titulo, data, status, anastasis }) {
           </span>
 
           {/* Tooltip */}
-          <span className="absolute bottom-full left-1/2 mb-1 w-40 -translate-x-1/2 rounded bg-black px-2 py-1 text-[10px] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <span
+            className={`absolute bottom-full left-1/2 mb-1 w-44 -translate-x-1/2 rounded bg-black px-2 py-1 text-[10px] text-white text-center transition-opacity duration-200
+              ${showTooltip ? "opacity-100" : "opacity-0"}
+              md:opacity-0 md:group-hover:opacity-100`}
+          >
             {isOk
               ? "Já temos missionário(a) escolhido(a) no Anastasis"
               : "Aguardando missionário(a) ser liberado(a) no Anastasis"}
