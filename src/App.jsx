@@ -64,12 +64,9 @@ function App() {
             publico: normalized["qual_e_o_publico_do_evento"] || "",
             quantidade: normalized["quantidade_de_pessoas_estimadas"] || "",
             pregador: pregador || "",
-            observacoes:
-              normalized[
-                "se_houver_alguma_informacao_adicional_sobre_o_evento_que_precisamos_saber_nos_informe_abaixo"
-              ] || "",
-            status: normalized["status"] || "",
+                   status: normalized["status"] || "",
             anastasis: normalized["anastasis"] || "",
+            observar: normalized["observar"] || "",
           };
         });
 
