@@ -14,27 +14,27 @@ function App() {
   const csvUrl =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRnaM_JWWdPDCv8Bt166hr2khhTb1QBtURYWpi9D1YFbyNnBdgC11H4jNdy2gYjRzJhY-DOnEA4-gTM/pub?output=csv";
 
-  // Tema dark/light
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // Converte data DD/MM/YYYY -> YYYY-MM-DD
   const parseDateBr = (dateStr) => {
     if (!dateStr) return "";
-    const [day, month, year] = dateStr.split("/");
-    return `${year}-${month}-${day}`;
+    const [d, m, y] = dateStr.split("/");
+    return `${y}-${m}-${d}`;
   };
 
-  // Fetch CSV
   useEffect(() => {
     async function fetchAgenda() {
       setLoading(true);
       try {
         const res = await fetch(csvUrl);
         const csvText = await res.text();
-        const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+        const parsed = Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+        });
 
         const formatted = parsed.data.map((item, index) => {
           const normalized = {};
@@ -47,7 +47,6 @@ function App() {
             normalized[cleanKey] = item[key]?.trim() || "";
           });
 
-          // Captura automaticamente qualquer coluna que contenha "pregador"
           const pregador = Object.keys(normalized)
             .filter((k) => k.includes("pregador"))
             .map((k) => normalized[k])
@@ -59,20 +58,48 @@ function App() {
             data: parseDateBr(normalized["data"]),
             horario_inicio: normalized["horario_inicio"] || "",
             horario_fim: normalized["horario_encerramento"] || "",
-            endereco: normalized["endereco_do_evento"] || "",
             cidade: normalized["informe_a_cidade"] || "",
-            publico: normalized["qual_e_o_publico_do_evento"] || "",
-            quantidade: normalized["quantidade_de_pessoas_estimadas"] || "",
-            pregador: pregador || "",
-                   status: normalized["status"] || "",
+
+            pregador,
+            status: normalized["status"] || "",
             anastasis: normalized["anastasis"] || "",
-            observar: normalized["observar"] || "",
+            observar: normalized["obs"] || "",
+
+            ministerio:
+              normalized[
+                "agora_precisamos_que_voce_sinalize_o_que_e_o_seu_evento"
+              ] || "",
+
+            musica_recursos:
+              normalized[
+                "se_voce_marcou_ministerio_de_musica_na_secao_anterior_marque_o_que_estara_disponivel_no_local_para_ser_usado_pelo_ministerio"
+              ] || "",
+
+            musica_instrumentos:
+              normalized[
+                "descreva_brevemente_a_quantidade_dos_instrumentos_que_estarao_disponiveis_no_local_do_evento_para_uso_por_favor_por_exemplo_caixas_microfones_partes_da_bateria_etc"
+              ] || "",
+
+            quantidade_intercessao:
+              normalized[
+                "marque_aqui_a_quantidade_de_pessoas_que_serao_necessarias_para_a_intercessao"
+              ] || "",
+
+            tema:
+              normalized[
+                "o_encontro_possui_um_tema_geral_se_sim_coloque_o_tema_aqui"
+              ] || "",
+
+            palavra_base:
+              normalized[
+                "ainda_sobre_o_tema_qual_e_a_palavra_biblica_de_base"
+              ] || "",
           };
         });
 
         setAgenda(formatted);
-      } catch (err) {
-        console.error("Erro ao buscar agenda:", err);
+      } catch (e) {
+        console.error(e);
         setAgenda([]);
       }
       setLoading(false);
@@ -83,9 +110,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-200 text-slate-900 dark:bg-black dark:text-slate-100 flex flex-col">
-      {/* Tema */}
       <button
-        aria-label="Alternar tema"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="fixed top-3 right-3 z-50 rounded-full bg-black/80 text-white px-3 py-2 text-sm shadow-lg dark:bg-white/10"
       >
@@ -100,7 +125,7 @@ function App() {
         {loading ? (
           Array.from({ length: 7 }).map((_, i) => <SkeletonCard key={i} />)
         ) : agenda.length === 0 ? (
-          <EmptyState filter="all" />
+          <EmptyState />
         ) : (
           <section className="grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {agenda.map((item) => (
