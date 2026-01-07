@@ -8,6 +8,7 @@ export default function Header() {
           className="h-full w-full object-cover"
         />
       </div>
+
     </header>
   );
 }

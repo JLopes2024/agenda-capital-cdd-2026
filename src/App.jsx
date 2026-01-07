@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import AgendaCard from "./components/AgendaCard";
 import SkeletonCard from "./components/SkeletonCard";
 import EmptyState from "./components/EmptyState";
+import DatasTravadas from "./components/DatasTravadas";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -120,6 +121,9 @@ function App() {
       <div className="px-3 pt-3">
         <Header />
       </div>
+
+       {/* Aviso institucional de datas bloqueadas */}
+      <DatasTravadas />
 
       <main className="flex-1 px-3">
         {loading ? (
