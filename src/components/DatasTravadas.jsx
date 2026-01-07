@@ -26,17 +26,23 @@ export default function DatasTravadas() {
           text-red-900 dark:text-red-200
         "
       >
-        {/* Cabeçalho */}
+        {/* Cabeçalho / Toggle */}
         <button
           onClick={toggle}
+          style={{ WebkitTapHighlightColor: "transparent" }}
           className="
             w-full
             flex items-center justify-between
             px-4 py-3
             text-left
             text-sm font-semibold
-            hover:bg-red-200/60 dark:hover:bg-red-500/10
             transition
+            hover:bg-red-200/60 dark:hover:bg-red-500/10
+            focus:outline-none
+            focus:ring-0
+            active:outline-none
+            active:ring-0
+            select-none
           "
         >
           <span className="flex items-center gap-2">

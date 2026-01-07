@@ -115,7 +115,7 @@ function App() {
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="fixed top-3 right-3 z-50 rounded-full bg-black/80 text-white px-3 py-2 text-sm shadow-lg dark:bg-white/10"
       >
-        {theme === "dark" ? "☀️" : "🌙"}
+        {theme === "dark" ? "🧑‍🚀" : "🧑‍🚀"}
       </button>
 
       <div className="px-3 pt-3">
