@@ -46,7 +46,7 @@ function App() {
             const cleanKey = key
               .toLowerCase()
               .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "") // ✅ REMOVE ACENTOS
+              .replace(/[\u0300-\u036f]/g, "")
               .trim()
               .replace(/[:]/g, "")
               .replace(/\s+/g, "_");
@@ -54,13 +54,9 @@ function App() {
             normalized[cleanKey] = item[key]?.trim() || "";
           });
 
-          // 🔍 DEBUG — OLHE ISSO NO CONSOLE
+          // 🔍 debug útil
           console.log("NORMALIZED:", normalized);
-          console.log(
-            "HORÁRIOS:",
-            normalized["horario_inicio"],
-            normalized["horario_encerramento"]
-          );
+          console.log("LOCAL_DO_EVENTO:", normalized["local_do_evento"]);
 
           const pregador = Object.keys(normalized)
             .filter((k) => k.includes("pregador"))
@@ -68,18 +64,26 @@ function App() {
             .filter(Boolean)
             .join(", ");
 
+          // ✅ ENDEREÇO = "Local do evento"
+          const endereco = normalized["local_do_evento"] || "";
+
+          // opcional: se quiser juntar CEP no texto do endereço
+          const cep = normalized["informe_o_cep"] || "";
+          const enderecoCompleto = [endereco, cep ? `CEP: ${cep}` : ""]
+            .filter(Boolean)
+            .join(" • ");
+
           return {
             id: index,
             titulo: normalized["nome_do_evento"] || "Sem título",
             data: parseDateBr(normalized["data"]),
-
-            // ✅ AGORA FUNCIONA
             horario_inicio: normalized["horario_inicio"] || "",
             horario_fim: normalized["horario_encerramento"] || "",
 
             cidade: normalized["informe_a_cidade"] || "",
-            pregador,
+            endereco: enderecoCompleto, // ✅ vai pro card por escrito
 
+            pregador,
             status: normalized["status"] || "",
             anastasis: normalized["anastasis"] || "",
             observar: normalized["obs"] || "",

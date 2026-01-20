@@ -75,10 +75,19 @@ const padTime = (t) => {
   return "";
 };
 
+const makeMapsUrl = (cidade, endereco) => {
+  const q = [endereco, cidade].filter(Boolean).join(", ");
+  if (!q) return "";
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    q
+  )}`;
+};
+
 // ---------------- COMPONENT ----------------
 export default function AgendaCard({
   titulo,
   cidade,
+  endereco, // ✅ NOVO
   data,
   horario_inicio,
   horario_fim,
@@ -104,7 +113,7 @@ export default function AgendaCard({
     return new Date(y, m - 1, d).toLocaleDateString("pt-BR");
   }, [data]);
 
-  // horários (AQUI ESTÁ O PONTO-CHAVE)
+  // horários
   const timeIni = useMemo(() => padTime(horario_inicio), [horario_inicio]);
   const timeFim = useMemo(() => padTime(horario_fim), [horario_fim]);
 
@@ -119,6 +128,8 @@ export default function AgendaCard({
     ANASTASIS_COLORS[anastasisKey] || ANASTASIS_COLORS.DEFAULT;
 
   const aguardandoAnastasis = !anastasisKey;
+
+  const mapsUrl = useMemo(() => makeMapsUrl(cidade, endereco), [cidade, endereco]);
 
   // --------- WHATSAPP ---------
   const resumoWhatsApp = useMemo(() => {
@@ -136,6 +147,8 @@ export default function AgendaCard({
       linhas.push(`🕕 *Encerramento:* ${timeFim || "--:--"}`);
     }
     if (cidade) linhas.push(`📍 *Cidade:* ${cidade}`);
+    if (endereco) linhas.push(`📌 *Endereço:* ${endereco}`);
+    if (mapsUrl) linhas.push(`🗺️ *Maps:* ${mapsUrl}`);
     if (pregador) linhas.push(`🎤 *Pregador(a):* ${pregador}`);
     if (ministerio) linhas.push(`🟣 *Ministério:* ${ministerio}`);
     if (tema) linhas.push(`📖 *Tema:* ${tema}`);
@@ -154,6 +167,8 @@ export default function AgendaCard({
     timeIni,
     timeFim,
     cidade,
+    endereco,
+    mapsUrl,
     pregador,
     ministerio,
     tema,
@@ -170,9 +185,7 @@ export default function AgendaCard({
   // ---------------- RENDER ----------------
   return (
     <div className="relative rounded-lg border border-black/10 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-zinc-900">
-      <div
-        className={`absolute left-0 top-0 h-full w-1 rounded-l-lg ${statusClass}`}
-      />
+      <div className={`absolute left-0 top-0 h-full w-1 rounded-l-lg ${statusClass}`} />
 
       <button
         type="button"
@@ -197,16 +210,22 @@ export default function AgendaCard({
           )}
         </div>
 
-        {/* 👇 AQUI O HORÁRIO APARECE NO CARD */}
         {(formattedDate || timeIni || timeFim) && (
           <p className="mt-1 text-[10px] text-slate-500 dark:text-slate-400">
             {formattedDate && `📅 ${formattedDate}`}
             {(timeIni || timeFim) && ` • ⏰ ${formattedTime}`}
           </p>
         )}
+
+        {/* ✅ LINHA DE LOCAL NO CARD (compacta) */}
+        {(cidade || endereco) && (
+          <p className="mt-1 text-[10px] text-slate-500 dark:text-slate-400 truncate">
+            📍 {[endereco, cidade].filter(Boolean).join(" • ")}
+          </p>
+        )}
       </button>
 
-      <div className="mt-2 flex gap-3 text-xs">
+      <div className="mt-2 flex gap-3 text-xs flex-wrap">
         <button
           onClick={() => setExpanded((v) => !v)}
           className="text-blue-600 dark:text-blue-400 hover:underline"
@@ -220,11 +239,25 @@ export default function AgendaCard({
         >
           {copiado === "ok" ? "Copiado!" : "Copiar WhatsApp"}
         </button>
+
+        {/* ✅ ABRIR MAPS */}
+        {mapsUrl && (
+          <a
+            href={mapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-slate-700 dark:text-slate-200 hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Abrir no Maps
+          </a>
+        )}
       </div>
 
       {expanded && (
         <div className="mt-2 text-xs space-y-1">
-          {cidade && <p>📍 {cidade}</p>}
+          {cidade && <p>🏙️ {cidade}</p>}
+          {endereco && <p>📌 {endereco}</p>}
           {pregador && <p>🎤 {pregador}</p>}
           {quantidade_intercessao && (
             <p>🙏 Pessoas necessárias: {quantidade_intercessao}</p>
