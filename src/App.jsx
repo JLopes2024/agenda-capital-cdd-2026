@@ -23,6 +23,7 @@ function App() {
   const parseDateBr = (dateStr) => {
     if (!dateStr) return "";
     const [d, m, y] = dateStr.split("/");
+    if (!d || !m || !y) return "";
     return `${y}-${m}-${d}`;
   };
 
@@ -32,6 +33,7 @@ function App() {
       try {
         const res = await fetch(csvUrl);
         const csvText = await res.text();
+
         const parsed = Papa.parse(csvText, {
           header: true,
           skipEmptyLines: true,
@@ -39,29 +41,45 @@ function App() {
 
         const formatted = parsed.data.map((item, index) => {
           const normalized = {};
+
           Object.keys(item).forEach((key) => {
             const cleanKey = key
               .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "") // ✅ REMOVE ACENTOS
               .trim()
               .replace(/[:]/g, "")
               .replace(/\s+/g, "_");
+
             normalized[cleanKey] = item[key]?.trim() || "";
           });
+
+          // 🔍 DEBUG — OLHE ISSO NO CONSOLE
+          console.log("NORMALIZED:", normalized);
+          console.log(
+            "HORÁRIOS:",
+            normalized["horario_inicio"],
+            normalized["horario_encerramento"]
+          );
 
           const pregador = Object.keys(normalized)
             .filter((k) => k.includes("pregador"))
             .map((k) => normalized[k])
+            .filter(Boolean)
             .join(", ");
 
           return {
             id: index,
             titulo: normalized["nome_do_evento"] || "Sem título",
             data: parseDateBr(normalized["data"]),
+
+            // ✅ AGORA FUNCIONA
             horario_inicio: normalized["horario_inicio"] || "",
             horario_fim: normalized["horario_encerramento"] || "",
-            cidade: normalized["informe_a_cidade"] || "",
 
+            cidade: normalized["informe_a_cidade"] || "",
             pregador,
+
             status: normalized["status"] || "",
             anastasis: normalized["anastasis"] || "",
             observar: normalized["obs"] || "",
@@ -69,16 +87,6 @@ function App() {
             ministerio:
               normalized[
                 "agora_precisamos_que_voce_sinalize_o_que_e_o_seu_evento"
-              ] || "",
-
-            musica_recursos:
-              normalized[
-                "se_voce_marcou_ministerio_de_musica_na_secao_anterior_marque_o_que_estara_disponivel_no_local_para_ser_usado_pelo_ministerio"
-              ] || "",
-
-            musica_instrumentos:
-              normalized[
-                "descreva_brevemente_a_quantidade_dos_instrumentos_que_estarao_disponiveis_no_local_do_evento_para_uso_por_favor_por_exemplo_caixas_microfones_partes_da_bateria_etc"
               ] || "",
 
             quantidade_intercessao:
@@ -100,7 +108,7 @@ function App() {
 
         setAgenda(formatted);
       } catch (e) {
-        console.error(e);
+        console.error("Erro ao buscar agenda:", e);
         setAgenda([]);
       }
       setLoading(false);
@@ -115,14 +123,13 @@ function App() {
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="fixed top-3 right-3 z-50 rounded-full bg-black/80 text-white px-3 py-2 text-sm shadow-lg dark:bg-white/10"
       >
-        {theme === "dark" ? "🧑‍🚀" : "🧑‍🚀"}
+        🧑‍🚀
       </button>
 
       <div className="px-3 pt-3">
         <Header />
       </div>
 
-       {/* Aviso institucional de datas bloqueadas */}
       <DatasTravadas />
 
       <main className="flex-1 px-3">
