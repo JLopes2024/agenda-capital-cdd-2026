@@ -126,6 +126,75 @@ const getDaysInfo = (isoDate) => {
   return { text, kind, diffDays };
 };
 
+// ✅ monta URL do Google Agenda (abre o evento preenchido)
+const makeGoogleCalendarUrl = ({
+  titulo,
+  dataISO,
+  timeIni,
+  timeFim,
+  cidade,
+  endereco,
+  observar,
+  pregador,
+  mapsUrl,
+}) => {
+  if (!dataISO) return "";
+
+  const makeLocalDate = (isoDate, hhmm) => {
+    const [y, m, d] = String(isoDate).split("-").map(Number);
+    const [hh, mm] = (hhmm || "00:00").split(":").map(Number);
+    return new Date(y, (m || 1) - 1, d || 1, hh || 0, mm || 0, 0);
+  };
+
+  let datesParam = "";
+
+  if (timeIni || timeFim) {
+    const start = makeLocalDate(dataISO, timeIni || "08:00");
+    let end = timeFim
+      ? makeLocalDate(dataISO, timeFim)
+      : new Date(start.getTime() + 2 * 60 * 60 * 1000);
+
+    if (end <= start) end = new Date(start.getTime() + 60 * 60 * 1000);
+
+    const toGCalUTC = (dt) =>
+      dt
+        .toISOString()
+        .replace(/[-:]/g, "")
+        .replace(/\.\d{3}Z$/, "Z");
+
+    datesParam = `${toGCalUTC(start)}/${toGCalUTC(end)}`;
+  } else {
+    const start = makeLocalDate(dataISO, "00:00");
+    const end = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+
+    const toYMD = (dt) => {
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth() + 1).padStart(2, "0");
+      const d = String(dt.getDate()).padStart(2, "0");
+      return `${y}${m}${d}`;
+    };
+
+    datesParam = `${toYMD(start)}/${toYMD(end)}`;
+  }
+
+  const location = [endereco, cidade].filter(Boolean).join(" - ");
+
+  const detailsLines = [
+    observar ? `Observações: ${observar}` : "",
+    pregador ? `Pregador(a): ${pregador}` : "",
+    mapsUrl ? `Maps: ${mapsUrl}` : "",
+  ].filter(Boolean);
+
+  const url = new URL("https://calendar.google.com/calendar/render");
+  url.searchParams.set("action", "TEMPLATE");
+  url.searchParams.set("text", titulo || "Missão");
+  url.searchParams.set("dates", datesParam);
+  if (location) url.searchParams.set("location", location);
+  if (detailsLines.length) url.searchParams.set("details", detailsLines.join("\n"));
+
+  return url.toString();
+};
+
 // ---------------- COMPONENT ----------------
 export default function AgendaCard({
   titulo,
@@ -182,6 +251,23 @@ export default function AgendaCard({
     [cidade, endereco]
   );
 
+  // ✅ URL do Google Agenda (evento preenchido)
+  const gcalUrl = useMemo(
+    () =>
+      makeGoogleCalendarUrl({
+        titulo,
+        dataISO: data,
+        timeIni,
+        timeFim,
+        cidade,
+        endereco,
+        observar,
+        pregador,
+        mapsUrl,
+      }),
+    [titulo, data, timeIni, timeFim, cidade, endereco, observar, pregador, mapsUrl]
+  );
+
   // --------- COPIAR SELECIONADOS ---------
   const COPY_FIELDS = useMemo(
     () => [
@@ -215,7 +301,7 @@ export default function AgendaCard({
     ]
   );
 
-  // default: selecionado por default (do jeito que você pediu)
+  // default: selecionado por default
   const defaultSelected = useMemo(() => {
     const base = Object.fromEntries(COPY_FIELDS.map((f) => [f.key, false]));
 
@@ -231,8 +317,6 @@ export default function AgendaCard({
 
   const [selected, setSelected] = useState(defaultSelected);
 
-  // se o card trocar (ou lista rerender), garante default não “fica velho”
-  // (sem usar useEffect pra não mexer no seu fluxo)
   useMemo(() => {
     setSelected((prev) => {
       const hasAny = Object.values(prev || {}).some(Boolean);
@@ -240,18 +324,6 @@ export default function AgendaCard({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nomeBase]);
-
-  const toggleField = (key) => {
-    setSelected((s) => ({ ...s, [key]: !s[key] }));
-  };
-
-  const marcarTudo = () => {
-    setSelected(Object.fromEntries(COPY_FIELDS.map((f) => [f.key, true])));
-  };
-
-  const desmarcarTudo = () => {
-    setSelected(Object.fromEntries(COPY_FIELDS.map((f) => [f.key, false])));
-  };
 
   const textoSelecionado = useMemo(() => {
     const linhas = [];
@@ -372,6 +444,19 @@ export default function AgendaCard({
             onClick={(e) => e.stopPropagation()}
           >
             Abrir no Maps
+          </a>
+        )}
+
+        {/* ✅ NOVO: adicionar no Google Agenda */}
+        {gcalUrl && (
+          <a
+            href={gcalUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-violet-700 hover:text-violet-800 dark:text-violet-300 dark:hover:text-violet-200 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 rounded"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Adicionar no Google Agenda
           </a>
         )}
       </div>
