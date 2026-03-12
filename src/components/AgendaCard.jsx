@@ -285,6 +285,8 @@ export default function AgendaCard({
       { key: "endereco", label: "Endereço", emoji: "📍", value: endereco },
       { key: "maps", label: "Link Maps", emoji: "🗺️", value: mapsUrl },
       { key: "pregador", label: "Pregador(a)", emoji: "🎤", value: pregador },
+            { key: "tema", label: "Tema", emoji: "📝", value: tema },
+
       { key: "obs", label: "Observações", emoji: "📝", value: observar },
     ],
     [
@@ -297,6 +299,7 @@ export default function AgendaCard({
       endereco,
       mapsUrl,
       pregador,
+      tema,
       observar,
     ]
   );
@@ -310,6 +313,7 @@ export default function AgendaCard({
     base.horario = true;
     base.endereco = true;
     base.pregador = true;
+    base.tema = true;
     base.obs = true;
 
     return base;
