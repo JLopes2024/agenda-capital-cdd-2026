@@ -95,11 +95,7 @@ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
  )}`;
 };
 
-{tema && (
-  <p className="mt-1 text-[10px] text-zinc-700 dark:text-zinc-300 truncate">
-    📝 Tema: {tema}
-  </p>
-)}
+
 
 // ✅ calcula dias e devolve texto + "tipo" pra cor
 const getDaysInfo = (isoDate) => {
@@ -305,7 +301,6 @@ cidade,
 endereco,
 mapsUrl,
 pregador,
-      tema,
 observar,
 ]
 );
@@ -319,7 +314,6 @@ base.data = true;
 base.horario = true;
 base.endereco = true;
 base.pregador = true;
-    base.tema = true;
 base.obs = true;
 
 return base;
@@ -570,7 +564,6 @@ className="px-3 py-1.5 rounded-xl bg-blue-600 text-white shadow-sm hover:bg-blue
 {cidade && <p>🏙️ {cidade}</p>}
 {endereco && <p>📌 {endereco}</p>}
 {pregador && <p>🎤 {pregador}</p>}
-{tema && <p>📝 Tema: {tema}</p>}
 {quantidade_intercessao && (
 <p>🙏 Pessoas necessárias: {quantidade_intercessao}</p>
 )}
