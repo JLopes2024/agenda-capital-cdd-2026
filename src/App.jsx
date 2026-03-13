@@ -163,7 +163,7 @@ function App() {
 
   // ✅ agrupa por mês e já ordena pelos meses e datas
   const gruposPorMes = useMemo(() => {
-    const sorted = [...agendaFiltrada].sort((b, a) =>
+    const sorted = [...agendaFiltrada].sort((a, b) =>
       (a.data || "").localeCompare(b.data || "")
     );
 
