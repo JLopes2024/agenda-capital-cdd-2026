@@ -356,7 +356,7 @@ function App() {
                     
                     {/* Indicador visual (Seta que gira ao fechar) */}
                     <span className={`text-xs text-slate-500 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-transform duration-200 ${estaFechado ? "-rotate-90" : ""}`}>
-                      {estaFechado ? "▶️ RECOLHIDO" : "▼ EXPANDIDO"}
+                      {estaFechado ? "▼" : "▶️"}
                     </span>
                   </button>
 
